@@ -2,7 +2,7 @@ package com.victoree2.common;
 
 //계정행위
 
-public interface AccountInterface {
+public interface accountInterface {
 	abstract public void signUP(); //회원가입
 	abstract public int login(); //로그인
 	abstract public void delete(); //계정 삭제

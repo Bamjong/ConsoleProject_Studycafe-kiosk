@@ -5,21 +5,21 @@ package com.victoree2.admin;
 
 import java.util.Scanner;
 
-import com.victoree2.common.ReadingroomFactory;
-import com.victoree2.common.accountSystem;
+import com.victoree2.common.actionInterface;
+import com.victoree2.common.readingroomFactory;
 import com.victoree2.common.returnmessage;
-import com.victoree2.user.User;
+import com.victoree2.main.readingroomEx;
+import com.victoree2.user.signupSystem;
 
 
-public class AdminSystem extends returnmessage implements accountSystem{
+public class adminSystem extends returnmessage implements actionInterface{
 	Scanner scan = new Scanner(System.in);
-	private String language="kor";
-	ReadingroomFactory factory;
+	readingroomEx room = new readingroomEx();
+	readingroomFactory factory;
 	
 	
-	public AdminSystem(String language) {
-		this.language = language;
-		this.factory = new ReadingroomFactory();
+	public adminSystem() {
+		this.factory = new readingroomFactory();
 	}
 	@Override
 	public void run() {
@@ -27,15 +27,11 @@ public class AdminSystem extends returnmessage implements accountSystem{
 		
 		int key=0;
 		while ((key = selectMenu()) != 0) {
-			User user = factory.getUser();
-			user.load(); // 로그인 체크를 위해 로그인 정보가 저장된 파일을 불러올것이다
 			switch (key) {
 			case 1:
 				
 				break;
 			case 2:
-				user.signUP();
-				break;
 			case 0:
 				System.out.println("종료");
 				System.exit(0);
@@ -47,7 +43,7 @@ public class AdminSystem extends returnmessage implements accountSystem{
 		}
 
 	}
-	public void selectAccount(User id) {
+	public void selectAccount(signupSystem id) {
 		//특정회원 조회
 	}
 	
@@ -70,7 +66,7 @@ public class AdminSystem extends returnmessage implements accountSystem{
 	}
 	@Override
 	public int selectMenu() {
-		System.out.println("1:회원정보 조회 2:결제취소 3:자리조회 0:종료");
+		System.out.println(message(room.language, "0002"));
 		return Integer.parseInt(scan.nextLine());
 	}
 	
