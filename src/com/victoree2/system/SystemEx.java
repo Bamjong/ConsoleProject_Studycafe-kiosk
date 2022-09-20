@@ -4,10 +4,10 @@ import java.util.Scanner;
 import java.util.Set;
 
 import com.victoree2.common.AccountData;
-import com.victoree2.common.returnMessage;
+import com.victoree2.common.ReturnMessage;
 import com.victoree2.main.ReadingRoom;
 
-public class SystemEx extends returnMessage{
+public class SystemEx extends ReturnMessage{
 	Scanner scan = new Scanner(System.in);
 
 
@@ -24,14 +24,14 @@ public class SystemEx extends returnMessage{
 			AccountSystem user = factory.getUser();
 			user.load(); //로그인 체크를 위해 로그인 정보가 저장된 파일을 불러올것이다
 			//관리자가 회원의 정보를 모두 보기위해 map값을 전부 가져옴
-			Set<String> userMap = user.getAccount().keySet();
+			HashMap<String, AccountData> userMap = user.getAccount();
 						
 			switch (key) {
 			case 1://로그인
 				AccountData userStatus = user.login();
 				if (userStatus != null) {
 					if (userStatus.getStatus() == 1) {// 사용자일 경우
-						userSystem us = factory.getUserSystem(userStatus);
+						UserSystem us = factory.getUserSystem(userStatus);
 						us.run();
 					} else if (userStatus.getStatus() == 9) {// 관리자일 경우.
 						AdminSystem as = factory.getAdminSystem(userMap);
@@ -51,7 +51,7 @@ public class SystemEx extends returnMessage{
 				change=!change;
 				room.language = (change) ?  "kor" : "en";
 				break;
-			case 0:
+			case -1:
 				System.out.println(message(room.language, "0018"));
 				System.exit(0);
 				break;
