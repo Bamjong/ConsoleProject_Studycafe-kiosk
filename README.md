@@ -12,9 +12,10 @@
 현정
 
 - ReturnMessage 관리자 부분 메시지 만들기
-- AdminSystem 에서 specificUser()
-- List<AccountData> selectAccount(String name)
-- userManager(AccountData user)
+- AdminSystem 에서 specificUser() // 특정 유저 검색 과 하위 옵션을 불러오는 메소드
+- List<AccountData> selectAccount(String name)//이름으로 유저를 검색하는 메소드
+- userManager(AccountData user)//유저 경고 관리 메소드
+- ReturnMessage 관리자 부분 메시지 만들기
 - selectMenu(String index) 메소드 만들기
 
 범종
@@ -23,7 +24,6 @@
 - timeReservation() 시간권 예약 메소드 만들기
 - payment() 결제 페이지 & 쿠폰 먹일것인지
 - paymentFinal() 최종 결제 페이지 만들고 좌석 선택하게 만들기
-
 
 
 
