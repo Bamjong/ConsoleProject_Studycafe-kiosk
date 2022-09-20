@@ -4,10 +4,10 @@ import java.util.Scanner;
 import java.util.Set;
 
 import com.victoree2.common.AccountData;
-import com.victoree2.common.returnMessage;
+import com.victoree2.common.ReturnMessage;
 import com.victoree2.main.ReadingRoom;
 
-public class SystemEx extends returnMessage{
+public class SystemEx extends ReturnMessage{
 	Scanner scan = new Scanner(System.in);
 
 
@@ -31,7 +31,7 @@ public class SystemEx extends returnMessage{
 				AccountData userStatus = user.login();
 				if (userStatus != null) {
 					if (userStatus.getStatus() == 1) {// 사용자일 경우
-						userSystem us = factory.getUserSystem(userStatus);
+						UserSystem us = factory.getUserSystem(userStatus);
 						us.run();
 					} else if (userStatus.getStatus() == 9) {// 관리자일 경우.
 						AdminSystem as = factory.getAdminSystem(userMap);

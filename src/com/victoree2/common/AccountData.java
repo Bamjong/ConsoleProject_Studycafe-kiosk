@@ -10,33 +10,28 @@ public class AccountData implements Serializable{
 	private String name; //이름
 	private String password; //패스워드
 	private String birthday; //생일
-	private String phonenumber;
-	private String startday; //결제일
-	private String endday; //종료일
+	private String phoneNumber;
 	private int status; //계정 상태 (1 : 사용자  0 : 계정 정지  9 : 관리자)
-	//private boolean  //입실/퇴실
-		//정기권
+	private boolean checkIn;// 입실/퇴실
+	private int cnt;//경고횟수
+
 	private static final long serialVersionUID = (long)5746694569156904189.0;
 	//serialversionuid 값을 지정을 안하면 로컬과 클라이언트에서 자동으로 생성되는 hash값으로 에러 발생함.
 	
 
-	public AccountData(String id, String name, String password, String birthday, String phonenumber, String startday, String endday) {
+	public AccountData(String id, String name, String password, String birthday, String phoneNumber) {
 		this.id = id;
 		this.name = name;
 		this.password = password;
 		this.birthday = birthday;
-		this.phonenumber = phonenumber;
-		this.startday = startday;
-		this.endday = endday;
+		this.phoneNumber = phoneNumber;
 		this.status = 1;
 	}
-	public AccountData(String id, String name, String password, String birthday, String startday, String endday, int status) {
+	public AccountData(String id, String name, String password, String birthday, int status) {
 		this.id = id;
 		this.name = name;
 		this.password = password;
 		this.birthday = birthday;
-		this.startday = startday;
-		this.endday = endday;
 		this.status = status;
 	}
 	public String getId() {
@@ -55,18 +50,6 @@ public class AccountData implements Serializable{
 	public String getBirthday() {
 		return birthday;
 	}
-	public String getStartday() {
-		return startday;
-	}
-	public void setStartday(String startday) {
-		this.startday = startday;
-	}
-	public String getEndday() {
-		return endday;
-	}
-	public void setEndday(String endday) {
-		this.endday = endday;
-	}
 	public int getStatus() {
 		return status;
 	}
@@ -76,7 +59,7 @@ public class AccountData implements Serializable{
 	@Override
 	public String toString() {
 		return "Account [id=" + id + ", name=" + name + ", password=" + password + ", birthday=" + birthday
-				+ ", startday=" + startday + ", endday=" + endday + ", status=" + status + "]";
+				+ ", status=" + status + "]";
 	}
 	
 	

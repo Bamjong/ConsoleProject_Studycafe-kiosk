@@ -46,12 +46,18 @@ public AccountData login() {
 
 <br>
 
-## 수정된 내용
+## 코드 정의서 수정된 내용
+
+    --------------------------------0920--------------------------------
+
+    수정된 내용.
 
     AccountData
     필드
     phonenumber -> phoneNumber
     startday,endday  : 삭제
+    private boolean checkIn; //체크인 추가.
+    private int cnt; //경고횟수.
 
     메소드
 
@@ -73,6 +79,25 @@ public AccountData login() {
     ActionInterface
     pwReset -> pwdReset 변경.
     ActionInterface를 상속받는 하위 클래스(AdminSystem, UserSystemm) 동일하게 메소드 명칭 변경.
+
+
+
+    --11:17--
+
+    리턴메시지적용
+
+    관리자 메뉴 매출현황 추가
+
+    --11:32--
+    selectMenu(String index) : 파라미터 int -> String으로 변경.
+    메뉴 구분을 상위 번호 + 선택번호를 갈것!
+    최상위 루트 index값은 "0" 고정
+    ex)
+    사용자 로그인 -> 마이페이지 접근시.
+    String index : "01"
+
+    1:로그인 2:회원가입 3:좌석보기 4:영어(toggle) 0:종료 (최상위 루트)
+    1:마이페이지 2:정기권 예약 3:시간권 예약 4:스터디룸 예약 5:좌석보기 0:로그아웃
 
 ## 한 일
 

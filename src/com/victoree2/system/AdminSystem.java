@@ -7,11 +7,11 @@ import java.util.Scanner;
 import java.util.Set;
 
 import com.victoree2.common.ActionInterface;
-import com.victoree2.common.returnMessage;
+import com.victoree2.common.ReturnMessage;
 import com.victoree2.main.ReadingRoom;
 
 
-public class AdminSystem extends returnMessage implements ActionInterface{
+public class AdminSystem extends ReturnMessage implements ActionInterface{
 	Scanner scan = new Scanner(System.in);
 	ReadingRoom room = new ReadingRoom();
 	ReadingRoomFactory factory;
@@ -27,16 +27,19 @@ public class AdminSystem extends returnMessage implements ActionInterface{
 		System.out.println(message(room.language, "0021"));
 		
 		int key=0;
-		while ((key = selectMenu(0)) != 0) {
+		while ((key = selectMenu("0")) != 0) {
 			switch (key) {
 			case 1:
 				selectAccount();
 				break;
 			case 2:
+				selectAccount();
 				break;
 			case 3:
+				//selectAccount(String id) scan통하여 원하는 id값 출력
 				break;
 			case 4:
+				coupon();
 				break;
 			case 0:
 				System.out.println(message(room.language, "0018"));
@@ -61,7 +64,8 @@ public class AdminSystem extends returnMessage implements ActionInterface{
 	public void inoutSeat() { // 회원 입퇴실 내역조회
 		
 	}
-	public void pwReset() { //패스워드 초기화
+	@Override
+	public void pwdReset() { //패스워드 초기화
 		
 	}
 	public void coupon() {//쿠폰
@@ -87,8 +91,11 @@ public class AdminSystem extends returnMessage implements ActionInterface{
 		
 	}
 	@Override
-	public int selectMenu(int index) {
-		System.out.println(message(room.language, "0003"));
+	public int selectMenu(String index) {
+		if(index == "0")
+			System.out.println(message(room.language, "0003"));
+		else if(index == "01")
+			System.out.println("양식");
 		return Integer.parseInt(scan.nextLine());
 	}
 

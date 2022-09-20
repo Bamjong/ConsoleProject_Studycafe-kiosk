@@ -16,11 +16,11 @@ import java.util.Scanner;
 import java.util.Set;
 
 import com.victoree2.common.AccountData;
-import com.victoree2.common.AccountInterface;
-import com.victoree2.common.returnMessage;
+import com.victoree2.common.SerializableInterface;
+import com.victoree2.common.ReturnMessage;
 import com.victoree2.main.ReadingRoom;
 
-public class AccountSystem extends returnMessage implements AccountInterface{
+public class AccountSystem extends ReturnMessage implements SerializableInterface{
 	
 	Scanner scan = new Scanner(System.in);
 	ReadingRoom room = new ReadingRoom();
@@ -28,7 +28,7 @@ public class AccountSystem extends returnMessage implements AccountInterface{
 	//key 값으로 id 값을 줄것이며 id값은 중복이 불가능하다.
 	private HashMap<String, AccountData> account = new HashMap<String, AccountData>();
 	
-	boolean admin_check = true;
+	boolean adminCheck = true;
 	private String id;
 	private String password;
 
@@ -54,21 +54,20 @@ public class AccountSystem extends returnMessage implements AccountInterface{
 		return account;
 	}
 
-	@Override
-	public void signUP(){
+	public void signUP(){ //회원가입
 		String regex = "^[a-zA-Z]{1}[a-zA-Z0-9_]{4,11}";
 		boolean regexCheck;
-		if(!admin_check) {
+		if(!adminCheck) {
 			System.out.println(message(room.language, "0007")+" "+message(room.language, "0005")+message(room.language, "0006"));
 			System.out.println(message(room.language, "0008")+" " + message(room.language, "0009") + " : ");
 			String id = scan.nextLine();
 			System.out.println(message(room.language, "0010") + " " + message(room.language, "0009") + " : ");
 			String password = scan.nextLine();
-			AccountData ac = new AccountData(id, "관리자", password, "00000000", "00000000", "99999999", 9);
+			AccountData ac = new AccountData(id, "관리자", password, "00000000", 9);
 			account.put(id, ac); 
 			
 			System.out.println(message(room.language, "0007")+" " +message(room.language, "0011"));
-			admin_check = true;
+			adminCheck = true;
 		}
 		else {
 			System.out.println(message(room.language, "0022"));
@@ -82,16 +81,14 @@ public class AccountSystem extends returnMessage implements AccountInterface{
 			String birthday = scan.nextLine();
 			System.out.println(message(room.language, "0025") + " " + message(room.language, "0009") + " : ");
 			String phonenumber = scan.nextLine();
-			AccountData ac = new AccountData(id, name, password, birthday,phonenumber, "00000000", "99999999");
+			AccountData ac = new AccountData(id, name, password, birthday,phonenumber);
 			account.put(id, ac);
 		}
 		System.out.println(message(room.language, "0011"));
 		save();
 	}
 
-
-	@Override
-	public AccountData login() {
+	public AccountData login() { //로그인
 		System.out.println(message(room.language, "0012"));
 		System.out.println(message(room.language, "0008")+" " + message(room.language, "0009") + " : ");
 		String id = scan.nextLine();
@@ -112,13 +109,11 @@ public class AccountSystem extends returnMessage implements AccountInterface{
 		return returnValue;
 	}
 
-	@Override
-	public void delete(HashMap<String, AccountData> account) {
+	public void delete(HashMap<String, AccountData> account) {//계정삭제
 		this.account = account;	
 	}
 
-	@Override
-	public void resetPassword() {
+	public void resetPassword() {//패스워드초기화
 		// TODO Auto-generated method stub
 		
 	}
@@ -154,7 +149,7 @@ public class AccountSystem extends returnMessage implements AccountInterface{
 				fis = new FileInputStream(file);
 //				if (fis.read() == -1) {
 				if (fis.getChannel().size() == 0) {
-					admin_check = false;
+					adminCheck = false;
 					signUP();
 					// 관리자 계정이 없을경우 생성을 해주며 아래 fis를 계정이 있는 상태의 파일로 읽으므로서 예외발생 x
 					fis = new FileInputStream(file);
