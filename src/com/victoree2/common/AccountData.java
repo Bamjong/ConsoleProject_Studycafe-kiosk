@@ -56,6 +56,12 @@ public class AccountData implements Serializable{
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	public int getCnt() {
+		return cnt;
+	}
+	public void setCnt() {
+		cnt++;
+	}
 	@Override
 	public String toString() {
 		return "Account [id=" + id + ", name=" + name + ", password=" + password + ", birthday=" + birthday
