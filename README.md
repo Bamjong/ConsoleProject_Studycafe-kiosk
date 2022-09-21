@@ -8,8 +8,10 @@
 
 20라인
 
-	ReadingRoomFactory factory = new ReadingRoomFactory();// 데이터 수정/삭제시 사용
-	AccountSystem user = factory.getUser();
+```java
+ReadingRoomFactory factory = new ReadingRoomFactory();// 데이터 수정/삭제시 사용
+AccountSystem user = factory.getUser();
+```
 
 234라인
 
@@ -20,11 +22,13 @@
 
 90라인
 
-	public void update(AccountData ac){
-		this.account.remove(ac.getId());
-		account.put(ac.getId(), ac);
-		save();
-	}
+```java
+public void update(AccountData ac){
+	this.account.remove(ac.getId());
+	account.put(ac.getId(), ac);
+	save();
+}
+```
 
 	AccountSystem 클래스의 update() 메소드 호출 시 파라미터값을 수정된 계정의 주소 전달함. 
 
