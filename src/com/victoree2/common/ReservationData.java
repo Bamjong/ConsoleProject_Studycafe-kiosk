@@ -1,6 +1,8 @@
 package com.victoree2.common;
 
-public class ReservationData {//입실퇴실, 남은시간 기록
+import java.io.Serializable;
+
+public class ReservationData implements Serializable{//입실퇴실, 남은시간 기록
 	private String id; //id
 	private String name; //이름
 	private String startDay; //결제일
@@ -9,6 +11,31 @@ public class ReservationData {//입실퇴실, 남은시간 기록
 	private boolean payStatus; //1: 정기구독권 2: 시간제사용자
 	private int indexX; // 정기구독권의 경우 고정 자리 정보값을 받는다.
 	private int indexY;
+	private int price; //가격
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getIndexX() {
+		return indexX;
+	}
+	public void setIndexX(int indexX) {
+		this.indexX = indexX;
+	}
+	public int getIndexY() {
+		return indexY;
+	}
+	public void setIndexY(int indexY) {
+		this.indexY = indexY;
+	}
 	
 	public String getStartDay() {
 		return startDay;

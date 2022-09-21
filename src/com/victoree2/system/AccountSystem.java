@@ -20,7 +20,7 @@ import com.victoree2.common.SerializableInterface;
 import com.victoree2.common.ReturnMessage;
 import com.victoree2.main.ReadingRoom;
 
-public class AccountSystem extends ReturnMessage implements SerializableInterface{
+public class AccountSystem extends ReturnMessage{
 	
 	Scanner scan = new Scanner(System.in);
 	ReadingRoom room = new ReadingRoom();
@@ -31,6 +31,8 @@ public class AccountSystem extends ReturnMessage implements SerializableInterfac
 	boolean adminCheck = true;
 	private String id;
 	private String password;
+	
+	
 
 	
 	//파일 직렬화
@@ -46,7 +48,7 @@ public class AccountSystem extends ReturnMessage implements SerializableInterfac
 	
 	Set<String> set;
 	
-	String filename = "C:\\KOSA_IT\\login\\UserDB1.txt";	
+	String filename = "C:\\KOSA_IT\\login\\UserDB.txt";	
 	File file = new File(filename);
 	
 	
@@ -89,6 +91,7 @@ public class AccountSystem extends ReturnMessage implements SerializableInterfac
 	}
 	//업데이트
 	public void update(AccountData ac){
+		load();// 수정.
 		this.account.remove(ac.getId());
 		account.put(ac.getId(), ac);
 		save();
@@ -122,7 +125,7 @@ public class AccountSystem extends ReturnMessage implements SerializableInterfac
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
+	
 	public void save(){
 		try {
 			fos = new FileOutputStream(file);
@@ -130,6 +133,7 @@ public class AccountSystem extends ReturnMessage implements SerializableInterfac
 			out = new ObjectOutputStream(bos);
 			
 			out.writeObject(account);
+			System.out.println("save success");/////
 		} catch (Exception e) {
 			System.out.println(e);
 		}finally {
@@ -142,7 +146,7 @@ public class AccountSystem extends ReturnMessage implements SerializableInterfac
 			}
 		}
 	}
-	@Override
+	
 	public void load() {
 		//역질렬화로 계정을 정보를 읽음.
 
@@ -150,7 +154,6 @@ public class AccountSystem extends ReturnMessage implements SerializableInterfac
 			// 파일이 없을경우 생성.
 			if (!file.exists())
 				file.createNewFile();
-
 				fis = new FileInputStream(file);
 //				if (fis.read() == -1) {
 				if (fis.getChannel().size() == 0) {

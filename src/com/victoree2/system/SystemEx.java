@@ -25,6 +25,7 @@ public class SystemEx extends ReturnMessage{
 			user.load(); //로그인 체크를 위해 로그인 정보가 저장된 파일을 불러올것이다
 			//관리자가 회원의 정보를 모두 보기위해 map값을 전부 가져옴
 			HashMap<String, AccountData> userMap = user.getAccount();
+			System.out.println(userMap);
 			switch (key) {
 			case 1://로그인
 				AccountData userStatus = user.login();

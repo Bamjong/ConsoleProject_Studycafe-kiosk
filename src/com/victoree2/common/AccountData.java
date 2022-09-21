@@ -9,8 +9,14 @@ public class AccountData implements Serializable{
 	private String id; //id
 	private String name; //이름
 	private String password; //패스워드
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 	private String birthday; //생일
 	private String phoneNumber;
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
 	private int status; //계정 상태 (1 : 사용자  0 : 계정 정지  9 : 관리자)
 	private boolean checkIn;// 입실/퇴실
 	private int cnt;//경고횟수

@@ -15,7 +15,7 @@ public class ReturnMessage {
 	void init() {
 		kor_message.put("0000", "해당계정은 정지되었습니다.");
 		kor_message.put("0001","1:로그인 2:회원가입 3:좌석보기 4:영어(toggle) -1:종료");
-		kor_message.put("0002","1:마이페이지 2:정기권 예약 3:시간권 예약 4:스터디룸 예약  5:%s 6:좌석보기 0:로그아웃 -1:종료\n"); 
+		kor_message.put("0002","1:마이페이지 2:정기권 예약 3:시간권 예약 4:스터디룸 예약 5:%s 6:좌석보기 0:로그아웃 -1:종료\n"); 
 		/*dayeong*/
 		kor_message.put("0003","1:좌석현황 2:전체회원 목록 3:회원검색 4:매출현황 5:쿠폰관리 0:로그아웃 -1:종료"); 
 		/*dayeong*/
@@ -41,7 +41,7 @@ public class ReturnMessage {
 		kor_message.put("0023","이름");
 		kor_message.put("0024","생일(주민등록번호 앞의 6자리)");
 		kor_message.put("0025","전화번호");
-		kor_message.put("0026","1:비밀번호 변경 2:환불 0:뒤로가기 -1:종료");
+		kor_message.put("0026","1:비밀번호 변경 2:전화번호 변경 3:환불 0:뒤로가기 -1:종료");
 		kor_message.put("0027","입실");
 		kor_message.put("0028","퇴실");
 		
@@ -79,7 +79,7 @@ public class ReturnMessage {
 		kor_message.put("0102","%s원 결제하시겠습니까? \n 1:예  2:쿠폰이 있어요! 0:뒤로가기 \n"); // 1,2,3 선택시
 		
 		 //1번 "예" 눌렀을 경우
-		kor_message.put("0103","%s 회원님의 권한이 부여되었습니다! 열람실을 선택해주세요 %s \n"); //앞에 이름 붙혀주기
+		kor_message.put("0103","%s 회원님의 권한이 부여되었습니다! \n 1: 열람실 선택하기 \n %s \n"); //앞에 이름 붙혀주기
 		kor_message.put("0104","좌석을 선택해주세요  \n"); //앞에 이름 붙혀주기
 		 //2번 "쿠폰이 있어요!" 눌렀을 경우
 		kor_message.put("0105","쿠폰번호를 입력해주세요.");
@@ -111,6 +111,14 @@ public class ReturnMessage {
 		kor_message.put("","");
 		kor_message.put("","");
 
+		kor_message.put("0212","현재 전화번호를 입력하세요.");
+		kor_message.put("0213","전화번호를 다시 확인하세요.");
+		kor_message.put("0214","새 전화번호를 입력하세요.");
+		kor_message.put("0215","전화번호 변경이 완료되었습니다.");
+		kor_message.put("0216","");
+		kor_message.put("0217","");
+		
+		
 		/*kdj*/
 		
 		
