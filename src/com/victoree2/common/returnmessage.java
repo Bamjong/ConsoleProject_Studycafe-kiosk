@@ -15,7 +15,7 @@ public class ReturnMessage {
 	void init() {
 		kor_message.put("0000", "해당계정은 정지되었습니다.");
 		kor_message.put("0001","1:로그인 2:회원가입 3:좌석보기 4:영어(toggle) -1:종료");
-		kor_message.put("0002","1:마이페이지 2:정기권 예약 3:시간권 예약 4:스터디룸 예약 5:좌석보기 0:로그아웃 -1:종료"); 
+		kor_message.put("0002","1:마이페이지 2:정기권 예약 3:시간권 예약 4:스터디룸 예약  5:%s 6:좌석보기 0:로그아웃 -1:종료\n"); 
 		/*dayeong*/
 		kor_message.put("0003","1:좌석현황 2:전체회원 목록 3:회원검색 4:매출현황 5:쿠폰관리 0:로그아웃 -1:종료"); 
 		/*dayeong*/
@@ -42,7 +42,10 @@ public class ReturnMessage {
 		kor_message.put("0024","생일(주민등록번호 앞의 6자리)");
 		kor_message.put("0025","전화번호");
 		kor_message.put("0026","1:비밀번호 변경 2:환불 0:뒤로가기 -1:종료");
-
+		kor_message.put("0027","입실");
+		kor_message.put("0028","퇴실");
+		
+		kor_message.put("0029","[%d]열람실 ");
 		
 //		kor_message.put("0023","생일");
 //		kor_message.put("0023","생일");
@@ -66,30 +69,18 @@ public class ReturnMessage {
 		kor_message.put("0062","해당 회원의 입퇴실내역입니다."); //3.회원 검색 -> 1.회원입퇴실내역조회
 		kor_message.put("0063","이 회원의 비밀번호를 초기화하겠습니까? 0000으로 초기화됩니다. 1:예 2:뒤로가기");//3.회원검색 -> 2.비밀번호 초기화
 		kor_message.put("0064","비밀번호가 초기화되었습니다.");//회원검색결과3번옵션-2
-		/*ndy*/
 		kor_message.put("0065", "매출 현황 입니다"); //4. 매출 현황
 		kor_message.put("0066","이 회원을 정지시킵니까? 1:예 2:뒤로가기"); //3.회원 검색 -> 4.정지 확인
 		kor_message.put("0067","이 회원의 권한을 정지하였습니다"); //3.회원 검색 -> 정지
 		kor_message.put("0068", "이 회원의 입퇴실 내역 입니다"); //3.회원검색 -> 1.회원의 입퇴실 내역
-
-		/*dhj*/ /*dayeong*/
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		/*GBJ*/
 		//정기권 예약
 		kor_message.put("0100","몇주를 예약하시겠습니까? \n 1: 2주권(%s원) \n 2: 4주권(%s원) \n 3: 8주권(%s원) \n 0: 뒤로가기 \n");//정기권예약
 		
 		kor_message.put("0102","%s원 결제하시겠습니까? \n 1:예  2:쿠폰이 있어요! 0:뒤로가기 \n"); // 1,2,3 선택시
 		
 		 //1번 "예" 눌렀을 경우
-		kor_message.put("0104","%s 회원님의 권한이 부여되었습니다! 좌석을 선택해주세요 %s \n"); //앞에 이름 붙혀주기
+		kor_message.put("0103","%s 회원님의 권한이 부여되었습니다! 열람실을 선택해주세요 %s \n"); //앞에 이름 붙혀주기
+		kor_message.put("0104","좌석을 선택해주세요  \n"); //앞에 이름 붙혀주기
 		 //2번 "쿠폰이 있어요!" 눌렀을 경우
 		kor_message.put("0105","쿠폰번호를 입력해주세요.");
 		kor_message.put("0106","(쿠폰)몇주를 예약하시겠습니까?");
@@ -97,6 +88,7 @@ public class ReturnMessage {
 		kor_message.put("0108"," 1: 2시간(%s원)\n 2: 4시간(%s원)\n 3: 7시간(%s원)\n 4: 9시간(%s원)\n 5: 12시간(%s원)\n 0: 뒤로가기 \n");//이후 104번 출력
 		kor_message.put("0109"," 시즌권은 자리를 지금 선택하셔야 합니다.");
 		kor_message.put("0110","좌석을 선택해주세요.\n");
+		kor_message.put("0111","열람실을 선택해주세요.");
 		/*GBJ*/
 		
 		/*kdj*/
@@ -105,8 +97,8 @@ public class ReturnMessage {
 		kor_message.put("0202", "남았습니다. ");
 		kor_message.put("0203"," 1:비밀번호 변경 \n 2:환불 \n 0:뒤로가기");
 		kor_message.put("0204","현재 비밀번호를 입력하세요.");
-		kor_message.put("0205","비밀번호를 다시 확인하세요 ");
-		kor_message.put("0206","새 비밀번호를 입력하세요");
+		kor_message.put("0205","비밀번호를 다시 확인하세요.");
+		kor_message.put("0206","새 비밀번호를 입력하세요.");
 		kor_message.put("0207","비밀번호 변경이 완료되었습니다. ");
 		kor_message.put("0208","환불 규정\n정기권 환불의 경우 1일 기준 환불이 가능합니다.\n시간권 환불의 경우 1시 기준 환불이 가능합니다.");
 		kor_message.put("0209","회원님의 환불 가능 금액 : ");
@@ -141,8 +133,8 @@ public class ReturnMessage {
 		
 		//1:좌석현황 2:전체 회원 목록 3:회원검색 4:회원정지 5:매출현황 6:쿠폰관리 0:로그아웃
 		en_message.put("0000", "This account has been suspended.");
-		en_message.put("0001", "1:Login 2:Membership 3:Seat View 4:Toggle -1:End");
-		en_message.put("0002","1:My Page 2:Regular Ticket Reservation 3:Time Ticket Reservation 4:Study Room Reservation 5:Seat View 0:Logout -1:End");
+		en_message.put("0001", "1:Login 2:Membership 3:Seat View 4:Korea(Toggle) -1:End");
+		en_message.put("0002","1:My Page 2:Regular Ticket Reservation 3:Time Ticket Reservation 4:Study Room Reservation 5:%s 6:Seat View 0:Logout -1:End\n");
 		en_message.put("0003","1: Seat status 2:All member list 3:Member search 4:Sales status 5:Coupon management 0: Logout -1: End");
 		en_message.put("0004","1: Welcome to the study cafe.^^;;");
 		en_message.put("0005","There is no account.");
@@ -167,7 +159,8 @@ public class ReturnMessage {
 		en_message.put("0024","Birthday (6 digits before resident registration number)");
 		en_message.put("0025","PhoneNumber");
 		en_message.put("0026","1:Change password 2:Refund 0:Back -1:End");
-		
+		en_message.put("0027","entry");
+		en_message.put("0028","check-out");
 		
 		
 		
@@ -196,13 +189,16 @@ public class ReturnMessage {
 		
 		
 		
+		
+		en_message.put("0111","Please select a reading room.");
+		
 		en_message.put("0200", "Hi");
 		en_message.put("0201", "!\n Your membership remain ");
 		en_message.put("0202", ". ");
 		en_message.put("0203"," 1:Change password\n 2:refund \n 0:back to prevoous menu");
 		en_message.put("0204","Input your current password.");
-		en_message.put("0205","Check out your password ");
-		en_message.put("0206","Input new password");
+		en_message.put("0205","Check out your password. ");
+		en_message.put("0206","Input new password.");
 		en_message.put("0207","Password change successfully ");
 		en_message.put("0208","Refund regulation \nIn case of season ticket, refund will be on an hour basis .\nIn case of time ticket, refund will be on an hour basis ");
 		en_message.put("0209","your total refundable money : ");
