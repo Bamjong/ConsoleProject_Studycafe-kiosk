@@ -1,9 +1,9 @@
 package com.victoree2.system;
 
 import java.util.HashMap;
-import java.util.Set;
 
 import com.victoree2.common.AccountData;
+import com.victoree2.common.ReservationData;
 import com.victoree2.common.ReturnMessage;
 
 // 클래스 집합
@@ -28,6 +28,9 @@ public class ReadingRoomFactory extends ReturnMessage{
 	}
 	public CalendarSystem getCalendarSystem() {//캘린더
 		return new CalendarSystem();
+	}
+	public ReservationData getReservationData() {
+		return new ReservationData();
 	}
 
 }

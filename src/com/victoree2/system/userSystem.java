@@ -1,9 +1,9 @@
 package com.victoree2.system;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Set;
 
 import com.victoree2.common.AccountData;
 import com.victoree2.common.ActionInterface;
@@ -26,10 +26,19 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 	
 	
 	
-	
 	ReadingRoomFactory factory = new ReadingRoomFactory();// 데이터 수정/삭제시 사용
 	AccountSystem user = factory.getUser();
 	SeatSystem seatSys = factory.getSeatSystem();
+
+	///////////////////////추가한거/////////////////////
+	private int price; 			//paymentfinal에서 가져옴
+	private String nowTimeString;
+	private String afterTimeString;
+	private int HourSeason[] = {336,672,1344};
+	private int HourTime[] = {2,4,7,9,12};
+	CalendarSystem calSys = factory.getCalendarSystem();
+	ReservationData rvData = factory.getReservationData();
+	/////////////////////////////////////////////////
 	
 	ReadingRoom room = new ReadingRoom();
 	Scanner scan = new Scanner(System.in);
@@ -103,6 +112,17 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 				int y = Integer.parseInt(scan.nextLine()); // 세로
 				seatSys.makeRoom(x, y);
 				break;
+				
+///////////////////////임시 시간 확인용/////////////////////
+			case 8:
+				System.out.println(calSys.NowTime());
+				System.out.println(calSys.AfterTime(336)); // 336시간 = 2주
+				break;
+				
+			case 9:
+				System.out.println(rvData.getStartDay());
+				System.out.println(rvData.getEndDay());
+////////////////////////////////////////////////////////
 			case -1: //시스템 종료.
 				System.out.println(message(room.language, "0018"));
 				System.exit(0);
@@ -220,11 +240,26 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 		while ((key = selectMenu("0211")) != -1212) {
 			switch (key) {
 			case 1:
-				int price = Integer.parseInt(paymentSeason[paymentpoint].replace(",", ""));
+			
+				if(payStatus == false) {
+					price = Integer.parseInt(paymentSeason[paymentpoint].replace(",", ""));
+					nowTimeString = calSys.NowTime();
+					afterTimeString = calSys.AfterTime(HourSeason[paymentpoint]);
+					rvData.setStartDay(nowTimeString);
+					rvData.setEndDay(afterTimeString);
+				} else {
+					price = Integer.parseInt(paymentTime[paymentpoint].replace(",", ""));
+					nowTimeString = calSys.NowTime();
+					afterTimeString = calSys.AfterTime(HourTime[paymentpoint]);
+					rvData.setStartDay(nowTimeString);
+					rvData.setEndDay(afterTimeString);
+				}
+				
 				userStatus.setPrice(price);
 				userStatus.setCheckIn(true);
 				userStatus.setStatus(2);
 				user.update(userStatus);
+				
 				checkRoom();
 				room.firstMain = true;
 				return;
@@ -265,13 +300,15 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 		seatSys.update(roomNum); //배열완성시 팩토리의 Seat 클래스 접속
 		//userStatus, payStatus,paymentSeason[paymentpoint],test.indexX,test.indexY //직렬화
 		//결제내역 직렬화
-		int price = Integer.parseInt(paymentSeason[paymentpoint].replace(",", "")); 
+		//int price = Integer.parseInt(paymentSeason[paymentpoint].replace(",", "")); 
 		reservationSys.save(userStatus, payStatus,price,roomNum,seatSys.getSeat());
 		if(payStatus == false)
 		{
 			userStatus.setCheckIn(true);
 		}
-			
+		
+		
+		
 		System.out.println("완료되었습니다.");
 	}
 	

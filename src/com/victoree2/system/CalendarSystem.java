@@ -17,7 +17,7 @@ public class CalendarSystem  extends ReturnMessage {
 }*/
 	
 //	String dateString = format.format(currentDate);
-//	Calendar cal = Calendar.getInstance();
+
 	
 	
 	//다른곳에서 사용시 
@@ -29,7 +29,23 @@ public class CalendarSystem  extends ReturnMessage {
 //	}
 //	cal.DateStirngYear(Calendar.getInstance());
 //  	
-	private String time;
+//	private String time;
+	
+	
+	//////////////////추가한거//////////////////////
+	Calendar now = Calendar.getInstance();
+	Calendar after = Calendar.getInstance();
+	public String NowTime() { //현재시간 출력
+		return DateString(now);
+	}
+	
+	public String AfterTime(int aftertime) {
+		after.add(Calendar.HOUR, aftertime);
+		return DateString(after);
+	}
+	/////////////////////////////////////////////
+	
+	
 	public String DateStirngYear(Calendar date) {
 		return date.get(Calendar.YEAR)+"년";
 		}
@@ -98,10 +114,5 @@ public class CalendarSystem  extends ReturnMessage {
 		return Days;
 	}
 		
-
-	public void setTime(String time) {
-		this.time = time;
-	}
-	
 }
 
