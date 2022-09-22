@@ -11,7 +11,7 @@ public class AccountData implements Serializable{
 	private String password; //패스워드
 	private String birthday; //생일
 	private String phoneNumber;
-	private int status; //계정 상태 (1 : 사용자  0 : 계정 정지  9 : 관리자)
+	private int status; //계정 상태 (1 : 사용자  0 : 계정 정지  9 : 관리자 3: 구매한사람?)
 	private boolean checkIn;// 입실/퇴실
 	private int cnt;//경고횟수
 	private int price;//결제금액

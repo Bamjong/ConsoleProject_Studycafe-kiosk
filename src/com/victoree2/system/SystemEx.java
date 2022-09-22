@@ -27,6 +27,9 @@ public class SystemEx extends ReturnMessage{
 		//if(reservationMap.get(userStatus.getId()) != null)//키값이 존재할경우. 
 		//키값이 존재할경우 user정보의 checkIn 값을 true로 변경할 것이며, 배열 초기화, 입/퇴실 출력문을 조건에 맞게 출력할것이다.
 		
+
+		
+
 		
 		
 		// 필요한 부분에서 로드를 해줘야됨 첫 페이지에서 하는게 아닌....
@@ -85,7 +88,7 @@ public class SystemEx extends ReturnMessage{
 						}
 					}
 				} else if (userStatus != null) {
-					if (userStatus.getStatus() == 1) {// 사용자일 경우
+					if (userStatus.getStatus() == 1 || userStatus.getStatus() == 2 ) {// 사용자일 경우
 						UserSystem us = factory.getUserSystem(userStatus);
 						us.run();
 					} else if (userStatus.getStatus() == 9) {// 관리자일 경우.

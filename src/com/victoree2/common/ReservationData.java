@@ -20,6 +20,8 @@ public class ReservationData implements Serializable{//입실퇴실, 남은시�
 
 	
 	private int price; //가격
+	
+	
 	public String getId() {
 		return id;
 	}

@@ -36,6 +36,8 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 	AccountData userStatus;
 	
 
+	
+	
 	//결제내역
 	ReservationSystem  reservationSys = factory.getReservationSystem();
 	HashMap<String, ReservationData> reservationMap;// = reservationSys.getReservation();//구독내역
@@ -53,7 +55,7 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 	}
 	@Override
 	public void run() {
-		
+//		reservationSys.update(userStatus);
 		seatSys.init();
 		reservationSys.load();
 		reservationMap = reservationSys.getReservation();//구독내역
@@ -74,19 +76,25 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 				}	
 				break;
 			case 2: //정기권 예약
+				if(userStatus.getStatus() == 2) {
+					System.out.println("이미 이용권을 갖고있음");
+					break;
+				}
 				payStatus = false;
 				seasonReservation();
 				break;
 			case 3: //시간권 예약
+				if(userStatus.getStatus() == 2) {
+					System.out.println("이미 이용권을 갖고있음");
+					break;
+				}
 				payStatus = true;
 				timeReservation();
 				break;
-			case 4: //스터디룸 예약 보류....
-				break;
-			case 5: // 입/퇴실
+			case 4: // 입/퇴실
 				checkRoom();
 				break;
-			case 6: //좌석보기
+			case 5: //좌석보기
 				checkSeat();
 				break;
 			case 7: //룸만들기
@@ -215,6 +223,7 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 				int price = Integer.parseInt(paymentSeason[paymentpoint].replace(",", ""));
 				userStatus.setPrice(price);
 				userStatus.setCheckIn(true);
+				userStatus.setStatus(2);
 				user.update(userStatus);
 				checkRoom();
 				room.firstMain = true;
@@ -289,8 +298,8 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 			System.out.println(message(room.language, "0209"));
 			long a =	aaaa.refundMoneyTime("2021011824","2021011823");
 			long a1 =	aaaa.refundMoneySeason("20210118","20210117");
-
-			System.out.println(aaaa.DateStirngYear(Calendar.getInstance()));
+			
+			
 			
 			System.out.println(a1);
 			System.out.println(message(room.language, "0210"));

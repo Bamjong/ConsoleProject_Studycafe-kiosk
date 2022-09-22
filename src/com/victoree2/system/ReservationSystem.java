@@ -129,11 +129,15 @@ public class ReservationSystem extends ReturnMessage{
 	//해당의 클래스는 예약내역으로 바꿀것.
 	
 	//업데이트
-	public void update(AccountData account){
-		load();// 수정.
-		this.reservation.remove(account.getId());
-		//reservation.put(account.getId(), account);
-		//save();
+	public void update(ReservationData data){
+//		load();// 수정.
+//		this.reservation.remove(data.getId());
+//		reservation.put(data.getId(), data);
+//		
+//		(AccountData account, boolean payStatus, int price, int roomarr, String seat
+//				
+//				
+//		save(data.get);
 	}
 	
 }
