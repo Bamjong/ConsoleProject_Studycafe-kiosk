@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 import com.victoree2.common.AccountData;
 import com.victoree2.common.ActionInterface;
+import com.victoree2.common.ReservationData;
 import com.victoree2.common.ReturnMessage;
 import com.victoree2.main.ReadingRoom;
 
@@ -22,14 +23,36 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 	List<AccountData> searchResult;
 	AccountData user;
 	AccountSystem userSystem;
-
+	ReservationSystem  reservationSys;
+	HashMap<String, ReservationData> reservationMap;
+	
+	SeatSystem seatSys;
+	
+	
+	
 	public AdminSystem(HashMap<String, AccountData> userMap2) {
 		this.factory = new ReadingRoomFactory();
 		this.userMap = userMap2;
 		this.userSystem = factory.getUser();
+		seatSys = factory.getSeatSystem();
+		
+		//결제내역
+		reservationSys = factory.getReservationSystem();
+		reservationMap = reservationSys.getReservation();//구독내역
+		ReservationData reservationData;
+		//
 	}
 	@Override
 	public void run() {
+		seatSys.init();
+		reservationSys.load();
+		ReservationData rd;
+		HashMap<String, ReservationData> reservationMap = reservationSys.getReservation();
+		for(Object value : reservationMap.values()) {
+			rd = (ReservationData) value;
+			seatSys.update(rd.getRoomarr(), rd.getSeat());
+		}
+		
 		System.out.println(message(room.language, "0021"));//"관리자 페이지에 접속하였습니다."
 		
 		//1:좌석현황 2:전체회원 목록 3:회원검색 4:매출현황 5:쿠폰관리 0:로그아웃 -1:종료
@@ -38,7 +61,14 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 			
 			switch (key) {
 			case 1:
-				checkSeat();
+				System.out.println(message(room.language, "0104"));
+
+				for (int i = 1; i <= seatSys.getRoomNum().size(); i++) {
+					System.out.print(i + ": " + i + "열람실 \n");
+				}
+				int roomNum = Integer.parseInt(scan.nextLine());
+				seatSys.print(roomNum);
+
 				break;
 			case 2:
 				selectAccount();
@@ -52,6 +82,13 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 			case 5:
 				//쿠폰관리
 				coupon();
+				break;
+			case 6:
+				//열람실 추가
+				System.out.println("6: 룸만들기");
+				int x = Integer.parseInt(scan.nextLine()); // 가로
+				int y = Integer.parseInt(scan.nextLine()); // 세로
+				seatSys.makeRoom(x, y);
 				break;
 			case 0:
 				System.out.println(message(room.language, "0018"));//종료
@@ -224,7 +261,6 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 	public void selectAccount() {
 		//회원 전부 조회
 		for(Object value : userMap.values()) {
-			
 			System.out.print(value);
 			user = (AccountData) value;
 			System.out.println("   경고" + user.getCnt());

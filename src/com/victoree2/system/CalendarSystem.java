@@ -22,14 +22,14 @@ public class CalendarSystem  extends ReturnMessage {
 	
 	//다른곳에서 사용시 
 //	
-	CalendarSystem cal = new CalendarSystem();
+//	CalendarSystem cal = new CalendarSystem();
 	
 //	void datatata() {
 //		cal.get()
 //	}
 //	cal.DateStirngYear(Calendar.getInstance());
 //  	
-	private static String time;
+	private String time;
 	public String DateStirngYear(Calendar date) {
 		return date.get(Calendar.YEAR)+"년";
 		}
@@ -46,7 +46,7 @@ public class CalendarSystem  extends ReturnMessage {
 		return date.get(Calendar.MINUTE)+"분";		
 	}
 
-	public static String DateString(Calendar date) {
+	public String DateString(Calendar date) {
 		return date.get(Calendar.YEAR)+"년"+
 					(date.get(Calendar.MONTH)+1)+"월"+
 							date.get(Calendar.DATE)+"일"+
@@ -55,6 +55,14 @@ public class CalendarSystem  extends ReturnMessage {
 	
 	}
 
+	public String DateFormat(Calendar date) {
+		return date.get(Calendar.YEAR)+""+
+				(date.get(Calendar.MONTH)+1)+""+
+						date.get(Calendar.DATE)+""+
+				date.get(Calendar.HOUR)+""+
+						date.get(Calendar.MINUTE)+"";
+	}
+	
 	public Long refundMoneyTime(String date1, String date2){
 		String refundTime="";
 		DateFormat format = new SimpleDateFormat("yyyyMMddHH");

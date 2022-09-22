@@ -1,11 +1,13 @@
 package com.victoree2.system;
 
-import java.io.PrintWriter;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Set;
 
 import com.victoree2.common.AccountData;
 import com.victoree2.common.ActionInterface;
+import com.victoree2.common.ReservationData;
 import com.victoree2.common.ReturnMessage;
 import com.victoree2.main.ReadingRoom;
 
@@ -23,22 +25,44 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 
 	
 	
-	SeatSystem test = new SeatSystem();
+	
 	
 	ReadingRoomFactory factory = new ReadingRoomFactory();// 데이터 수정/삭제시 사용
 	AccountSystem user = factory.getUser();
+	SeatSystem seatSys = factory.getSeatSystem();
 	
 	ReadingRoom room = new ReadingRoom();
 	Scanner scan = new Scanner(System.in);
 	AccountData userStatus;
 	
+
+	//결제내역
+	ReservationSystem  reservationSys = factory.getReservationSystem();
+	HashMap<String, ReservationData> reservationMap;// = reservationSys.getReservation();//구독내역
+	ReservationData reservationData;
+	//
+	
+	
+
+	
+	
+	
 	public UserSystem(AccountData userStatus) {
 		this.userStatus = userStatus;
 		checkIn = (userStatus.getCheckIn()) ? message(room.language,"0028") : message(room.language,"0027"); //입퇴실값 초기화.
-		//test.init();
 	}
 	@Override
 	public void run() {
+		
+		seatSys.init();
+		reservationSys.load();
+		reservationMap = reservationSys.getReservation();//구독내역
+		ReservationData rd;
+		for(Object value : reservationMap.values()) {
+			rd = (ReservationData) value;
+			seatSys.update(rd.getRoomarr(), rd.getSeat());
+		}
+		
 		System.out.println(userStatus.getName()+message(room.language, "0019"));
 		while ((key = selectMenu("0")) != 0) {
 			switch (key) {
@@ -69,7 +93,7 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 				System.out.println("7: 룸만들기");
 				int x = Integer.parseInt(scan.nextLine()); // 가로
 				int y = Integer.parseInt(scan.nextLine()); // 세로
-				test.makeRoom(x, y);
+				seatSys.makeRoom(x, y);
 				break;
 			case -1: //시스템 종료.
 				System.out.println(message(room.language, "0018"));
@@ -98,7 +122,10 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 			case 2:// 휴대폰번호 변경
 				phoneNumberReset();
 				break;
-			case 3:// 결제취소
+			case 3://결제내역
+				selectReservation();
+				break;
+			case 4:// 결제취소
 				paymentCancel();
 				if(room.firstMain == true)
 					return;			
@@ -120,93 +147,59 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 
 	public void seasonReservation(){//정기권 예약
 		while ((key = selectMenu("02")) != 0) {
-			switch (key) {
-			case 1: //2주권
+			if(key == 1) {
 				paymentpoint = 0;
-				payment(); //payment() 이동
-				if(room.firstMain == true)
-					return;
-				break;
-			case 2:// 4주권
+			}	
+			else if(key == 2) {
 				paymentpoint = 1;
-				payment(); //payment() 이동
-				if(room.firstMain == true)
-					return;
-				break;
-			case 3:// 8주권
+			}
+			else if(key == 3) {
 				paymentpoint = 2;
-				payment(); //payment() 이동
-				if(room.firstMain == true)
-					return;
-				break;
-			default:
+			}
+			else if(key == 0) {
 				System.out.println(message(room.language, "0020"));
 				break;
 			}
+			payment(); //payment() 이동
+			if(room.firstMain == true)
+				return;
+
 		}
 	}
 	public void timeReservation() {//시간권예약
 		while ((key = selectMenu("03")) != 0) {
-			switch (key) {
-			
-			case 1: //2주권
+			if(key == 1) {
 				paymentpoint = 0;
-				payment(); //payment() 이동
-				if(room.firstMain == true)
-					return;
-				break;
-				
-			case 2:// 4주권
+			}	
+			else if(key == 2) {
 				paymentpoint = 1;
-				payment(); //payment() 이동
-				if(room.firstMain == true)
-					return;
-				break;
-				
-			case 3:// 8주권
-				paymentpoint = 2;
-				payment(); //payment() 이동
-				if(room.firstMain == true)
-					return;
-				break;
-				
-			case 4:// 8주권
-				paymentpoint = 3;
-				payment(); //payment() 이동
-				if(room.firstMain == true)
-					return;
-				break;
-			
-			case 5:// 8주권
-				paymentpoint = 4;
-				payment(); //payment() 이동
-				if(room.firstMain == true)
-					return;
-				break;
-
-			default:
-				System.out.println(message(room.language, "0020"));
-				break;
 			}
+			else if(key == 3) {
+				paymentpoint = 2;
+			}
+			else if(key == 4) {
+				paymentpoint = 3;
+			}
+			else if (key == 5) {
+				paymentpoint = 4;
+			}
+
+			payment(); //payment() 이동
+			if(room.firstMain == true)
+				return;
 		}
 	}
 	
 	public void payment() { //결제하다
 		while ((key = selectMenu("021")) != 0) {
 			switch (key) {
-			
 			case 1:
 				paymentFinal();
 				if(room.firstMain == true)
 					return;
-				break;
-			case 2:
-				// 쿠폰 창
-				break;
-			case 9:
+			case 0:
 				room.firstMain = true;
 				break;
-				
 			default:
 				System.out.println(message(room.language, "0020"));
 				break;
@@ -216,17 +209,19 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 	
 	//최종결제 후 좌석결제
 	public void paymentFinal() {
-		while ((key = selectMenu("0211")) != 0) {
+		while ((key = selectMenu("0211")) != -1212) {
 			switch (key) {
-
 			case 1:
+				int price = Integer.parseInt(paymentSeason[paymentpoint].replace(",", ""));
+				userStatus.setPrice(price);
+				userStatus.setCheckIn(true);
+				user.update(userStatus);
 				checkRoom();
 				room.firstMain = true;
 				return;
-			case 9:
+			case 9 :
 				room.firstMain = true;
 				return;
-
 			default:
 				System.out.println(message(room.language, "0020"));
 				break;
@@ -235,17 +230,51 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 	}
 
 	public void checkRoom() { // 열람실 몇번방인지 체크
+		//if(userStatus.getPrice()==0)
+		if(userStatus.getPrice() == 0)
+		{
+			System.out.println("결제하십시오.");
+			return;
+		}
+		
 		System.out.println(message(room.language, "0104"));
 		
-		for (int i = 1; i <= test.testList.size(); i++) {
+		for (int i = 1; i <= seatSys.getRoomNum().size(); i++) {
 			System.out.print(i + ": " + i +" 열람실 \n");
 		}
-		int room = Integer.parseInt(scan.nextLine());
+		int roomNum = Integer.parseInt(scan.nextLine());
 		
-		checkSeat(room);
+		checkSeat(roomNum);
 		
 		//날짜값(분까지),boolean 정기구독 구분값,,int 각 가격 ,int 행, int 열
 	
+	}
+	
+	public void checkSeat(int roomNum) { //정기권 , 시간권
+		seatSys.print(roomNum);
+//		int seatNum = Integer.parseInt(scan.nextLine());
+		seatSys.update(roomNum); //배열완성시 팩토리의 Seat 클래스 접속
+		//userStatus, payStatus,paymentSeason[paymentpoint],test.indexX,test.indexY //직렬화
+		//결제내역 직렬화
+		int price = Integer.parseInt(paymentSeason[paymentpoint].replace(",", "")); 
+		reservationSys.save(userStatus, payStatus,price,roomNum,seatSys.getSeat());
+		if(payStatus == false)
+		{
+			userStatus.setCheckIn(true);
+		}
+			
+		System.out.println("완료되었습니다.");
+	}
+	
+	@Override
+	public void checkSeat() { // 그냥 자리만 보고싶을때
+		System.out.println(message(room.language, "0104"));
+
+		for (int i = 1; i <= seatSys.getRoomNum().size(); i++) {
+			System.out.print(i + ": " + i + "열람실 \n");
+		}
+		int roomNum = Integer.parseInt(scan.nextLine());
+		seatSys.print(roomNum);
 	}
 
 	
@@ -277,22 +306,7 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 		}
 	}
 
-	public void checkSeat(int room) { //정기권 , 시간권
-		test.print(room);
-		test.update(room);
-		System.out.println("완료되었습니다.");
-	}
-	
-	@Override
-	public void checkSeat() { // 그냥 자리만 보고싶을때
-		System.out.println(message(room.language, "0104"));
 
-		for (int i = 1; i <= test.testList.size(); i++) {
-			System.out.print(i + ": " + i + "열람실 \n");
-		}
-		int room = Integer.parseInt(scan.nextLine());
-		test.print(room);
-	}
 	
 	@Override
 	public void pwdReset() {
@@ -343,7 +357,19 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 			}	
 		}
 	}
-	
+	public void selectReservation() {
+		//결제내역 조회  !!!정기구독권 사용자로 처음 시스템 시작시 데이터 load할수 있게 해야함 
+//		reservationSys.load();
+		reservationMap = reservationSys.getReservation();//구독내역
+//		Set<String> reservationList = reservationMap.keySet();
+		if(reservationMap.get(userStatus.getId()) != null)//키값이 존재할경우.
+		System.out.println(reservationMap.get(userStatus.getId()).toString());
+//		get(userStatus.getId());
+//			System.out.print(value);
+//			reservationData = (ReservationData)value;
+//			System.out.println(reservationData.toString());
+//		}
+	}
 	@Override
 	public int selectMenu(String index) {
 		if(index == "0")
@@ -359,7 +385,7 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 		{//특수케이스
 			System.out.println(message(room.language, "0111"));//열람실 개수는 3개 고정으로 둘것이지만 추후 증가될것을 생각하여 for문으로 직접 작성.
 
-			for(int i = 0 ; i < test.testList.size(); i++) {
+			for(int i = 0 ; i < seatSys.getRoomNum().size(); i++) {
 				System.out.printf((i+1) + " : " + message(room.language, "0029"),(i+1));
 			}
 			System.out.println();
@@ -368,7 +394,7 @@ public class UserSystem extends ReturnMessage implements ActionInterface{
 		else if(index == "021") 
 			System.out.printf(message(room.language, "0102"), payStatus == false ? paymentSeason[paymentpoint] : paymentTime[paymentpoint]);  // 무슨 권이냐에 따라 가격 출력
 		else if(index == "0211")
-			System.out.printf(message(room.language, "0103"), userStatus.getId(), payStatus == false ? "" : "\n 9: 돌아가기 ");  // 아이디 출력 후 시즌권에 따라 뒤로가기 다르게 출력
+			System.out.printf(message(room.language, "0103"), userStatus.getId(), payStatus == false ? "" : "\n 9: 돌아가기(초기화면) ");  // 아이디 출력 후 시즌권에 따라 뒤로가기 다르게 출력
 		return Integer.parseInt(scan.nextLine());
 	}
 }

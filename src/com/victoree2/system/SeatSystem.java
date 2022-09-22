@@ -5,18 +5,64 @@ import java.util.List;
 import java.util.Scanner;
 
 public class SeatSystem {
-	int indexX;
-	int indexY;
 	
-	String test[][] = { {"[1]", "[2]"},{"[3]", "[4]"}}; //기본자리
-	String test2[][] = { {"[1]", "[2]"},{"[3]", "[4]", "[5]"}}; //기본자리
-	List<String[][]> testList = new ArrayList<String[][]>();
-	Scanner scan = new Scanner(System.in);
+	public String firstBraket = "[";
+	private String seat;//좌석번호
+	private int roomarr;//열람실
 
+
+	public String getSeat() {
+		return seat;
+	}
+
+	public int getRoomarr() {
+		return roomarr;
+	}
+
+	public String lastBraket = "]";	
+	private int cnt;
+	private List<String[][]> roomNum = new ArrayList<String[][]>(); //다형성 //열람실 번호 roomNum
+
+
+	private String deskIndex1[][] = new String[6][9]; //좌석 번호 //세로열 [0~2], 가로열[0~6] 
+	private String deskIndex2[][] = new String[4][6]; //좌석 번호 //세로열 [0~3], 가로열[0~5]
+	private String deskIndex3[][] = new String[5][5]; //좌석 번호 //세로열 [0~4], 가로열[0~4]
 	
-	public SeatSystem() {
-		testList.add(test); //기본자리
-		testList.add(test2); //기본자리
+	Scanner scan = new Scanner(System.in);
+	
+	void init() { //초기과 좌석 배열
+		cnt = 1;
+		
+		//1열람실 좌석 배열 arr1
+		for (int i = 0; i <deskIndex1.length; i++) {
+			for (int j = 0; j <deskIndex1[i].length; j++) {
+				deskIndex1[i][j] =firstBraket + (String.valueOf(cnt++)) + lastBraket;
+				//System.out.print(deskIndex1[i][j]);
+			}
+		}
+		cnt=1;
+		
+		//2열람실 좌석 배열 arr2
+		for (int i = 0; i <deskIndex2.length; i++) {
+			for (int j = 0; j <deskIndex2[i].length; j++) {
+				deskIndex2[i][j] =firstBraket + (String.valueOf(cnt++)) + lastBraket;
+			}
+		}
+		cnt=1;
+		//3열람실 좌석 배열 arr3
+		for (int i = 0; i <deskIndex3.length; i++) {
+			for (int j = 0; j <deskIndex3[i].length; j++) {
+				deskIndex3[i][j] =firstBraket + (String.valueOf(cnt++)) + lastBraket;
+			}
+		}
+		cnt=1;
+		  roomNum.add(deskIndex1);
+		  roomNum.add(deskIndex2);
+		  roomNum.add(deskIndex3);
+	}
+
+	public List<String[][]> getRoomNum() {
+		return roomNum;
 	}
 
 	public void makeRoom(int x, int y) {
@@ -29,11 +75,11 @@ public class SeatSystem {
 				room++;
 			}
 		}
-		testList.add(temp);
+		roomNum.add(temp);
 	}
 	
-	public void print(int room) { 
-		String tmp[][] = testList.get(room-1);
+	public void print(int room) {
+		String tmp[][] = roomNum.get(room-1);
 		
 		for(int i = 0 ; i < tmp.length ; i++) {
 			for(int j = 0 ; j < tmp[i].length ; j++) {
@@ -43,56 +89,51 @@ public class SeatSystem {
 		}
 	}
 	
-//	public void update(int room, String seat) { // 
-//		String tempSeat = "[" + seat + "]";
-//		String tmp[][] = testList.get(room-1);
-//		
-//		for(int i=0; i<tmp.length;i++ ) {
-//			for(int j=0; j<tmp[i].length;j++) {
-//				if(tmp[i][j].equals("[사용중]")) {
-//					System.out.println("이미 사용중인 자리입니다.");
-//					break;
-//				}else if(tmp[i][j].equals(tempSeat)) {
-//					tmp[i][j] = "["+"사용중"+"]";
-//					this.indexX = i;
-//					this.indexY = j;
-//				}
-//			}
-//		}
-//	}
-	
+	///
 	public void update(int room) {
 		boolean pnp = true; // [사용중] 좌석 선택시 다시 돌도록.
-		
-		while(pnp == true) {
-			String seat = scan.nextLine();
+
+		while (pnp == true) {
+			seat = scan.nextLine();
+			roomarr = room;
 			String tempSeat = "[" + seat + "]";
-			String tmp[][] = testList.get(room-1);
-			
-			for(int i=0; i<tmp.length;i++ ) {
-				for(int j=0; j<tmp[i].length;j++) {
-					if(tmp[i][j].equals("[사용중]")) {
-						pnp = true;
-						System.out.println("이미 사용중인 자리입니다. 재입력하세요.");
-					}
-					if(tmp[i][j].equals(tempSeat)) {
-						tmp[i][j] = "["+"사용중"+"]";
-						this.indexX = i;
-						this.indexY = j;
+			String tmp[][] = roomNum.get(room - 1);
+
+			for (int i = 0; i < tmp.length; i++) {
+				for (int j = 0; j < tmp[i].length; j++) {
+					if (tmp[i][j].equals(tempSeat)) {
 						pnp = false;
+						tmp[i][j] = "[" + "사용중" + "]";
 					}
+
+				}
+			}
+		}
+
+	}
+
+	//시스템 시작시 좌석 초기화값
+
+	public void update(int roomarr, String seat) {
+		
+		boolean pnp = true; // [사용중] 좌석 선택시 다시 돌도록.
+
+		while (pnp == true) {
+			String tempSeat = "[" + seat + "]";
+			String tmp[][] = roomNum.get(roomarr - 1);
+
+			for (int i = 0; i < tmp.length; i++) {
+				for (int j = 0; j < tmp[i].length; j++) {
+					if (tmp[i][j].equals(tempSeat)) {
+						pnp = false;
+						tmp[i][j] = "[" + "사용중" + "]";
+					}
+
 				}
 			}
 		}
 	}
 
-	public int getIndexX() {
-		return indexX;
-	}
-
-	public int getIndexY() {
-		return indexY;
-	}
 	
 	
 	
