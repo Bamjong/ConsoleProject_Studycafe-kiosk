@@ -5,11 +5,17 @@ package com.victoree2.system;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 import com.victoree2.common.AccountData;
 import com.victoree2.common.ActionInterface;
+import com.victoree2.common.ReservationData;
 import com.victoree2.common.ReturnMessage;
 import com.victoree2.main.ReadingRoom;
 
@@ -22,14 +28,38 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 	List<AccountData> searchResult;
 	AccountData user;
 	AccountSystem userSystem;
-
+	ReservationSystem  reservationSys;
+	HashMap<String, ReservationData> reservationMap;
+	static Set<String> set = new HashSet<>();
+	
+	SeatSystem seatSys;
+	int discountRate;
+	
+	
 	public AdminSystem(HashMap<String, AccountData> userMap2) {
 		this.factory = new ReadingRoomFactory();
 		this.userMap = userMap2;
 		this.userSystem = factory.getUser();
+		seatSys = factory.getSeatSystem();
+		
+		//결제내역
+		reservationSys = factory.getReservationSystem();
+		reservationSys.getReservation();//구독내역
+		ReservationData reservationData;
+		//
 	}
 	@Override
 	public void run() {
+		seatSys.init();
+		reservationSys.load();
+		ReservationData rd;
+		reservationMap = reservationSys.getReservation();
+		for(Object value : reservationMap.values()) {
+			rd = (ReservationData) value;
+			if(rd.getRoomarr()!=0)
+			seatSys.update(rd.getRoomarr(), rd.getSeat());
+		}
+		
 		System.out.println(message(room.language, "0021"));//"관리자 페이지에 접속하였습니다."
 		
 		//1:좌석현황 2:전체회원 목록 3:회원검색 4:매출현황 5:쿠폰관리 0:로그아웃 -1:종료
@@ -38,7 +68,14 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 			
 			switch (key) {
 			case 1:
-				checkSeat();
+				System.out.println(message(room.language, "0104"));
+
+				for (int i = 1; i <= seatSys.getRoomNum().size(); i++) {
+					System.out.print(i + ": " + i + "열람실 \n");
+				}
+				int roomNum = Integer.parseInt(scan.nextLine());
+				seatSys.print(roomNum);
+
 				break;
 			case 2:
 				selectAccount();
@@ -52,6 +89,16 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 			case 5:
 				//쿠폰관리
 				coupon();
+				break;
+			case 6:
+				//열람실 추가
+				System.out.println("6: 룸만들기");
+				System.out.print("가로 : ");
+				int x = Integer.parseInt(scan.nextLine()); // 가로
+				System.out.println("세로 : ");
+				int y = Integer.parseInt(scan.nextLine()); // 세로
+				seatSys.makeRoom(x, y);
+				System.out.println("열람실을 추가했습니다.");
 				break;
 			case 0:
 				System.out.println(message(room.language, "0018"));//종료
@@ -79,8 +126,9 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 			
 			while((key = selectMenu("03"))!=-1){
 				switch(key){
-					case 1:	//입퇴실내역조회
-						System.out.println("입퇴실내역");
+					case 1:	//거래내역확인
+						//kor_message.put("0062","해당 회원의 결제내역입니다."); //3.회원 검색 -> 1.회원입퇴실내역조회
+						
 						inoutSeat();
 						break;
 					case 2:
@@ -154,6 +202,10 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 	
 	public void bann() { //회원 정지
 //		System.out.println("해당 회원을 정지시키겠습니까? 1:예 2:뒤로가기");
+		if(user.getStatus()==0) {
+			System.out.println("이미 정지된 회원입니다.");
+			return;
+		}
 		System.out.println(message(room.language, "0066"));
 		int bannCheck = Integer.parseInt(scan.nextLine());
 		if(bannCheck == 1) {
@@ -163,8 +215,15 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 		}
 	}
 	
-	public void inoutSeat() { // 회원 입퇴실 내역조회
-		
+	public void inoutSeat() { // 회원결제내역조회
+		reservationMap = reservationSys.getReservation();//구독내역
+		if(reservationMap.get(user.getId()) != null){//키값이 존재할경우.
+			System.out.println(message(room.language, "0062"));
+			System.out.println(reservationMap.get(user.getId()).toString());
+		}
+		else {
+			System.out.println("해당 회원의 결제내역이 존재하지 않습니다.");
+		}
 	}
 	@Override
 	public void pwdReset(/*AccountData user*/) { //패스워드 초기화 유저 객체를 받아와서 바꾸려고 했는데 interface에 설계가 다름
@@ -183,6 +242,11 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 	public void showSales() {
 		//매출확인
 		System.out.println("매출현황입니다.");
+		int sum = 0;
+		 for(Entry<String, ReservationData> elem : reservationMap.entrySet()){
+             sum += elem.getValue().getPrice();
+         }
+		 System.out.println("총합 " + sum);
 	}
 	
 	public void coupon() {//쿠폰
@@ -209,11 +273,65 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 	//쿠폰의 하위 함수들
 	public void listCoupon() {
 		//현재 발행된 쿠폰 출력
-		System.out.println("coupon...");
+		if(set.size() ==0) {
+			System.out.println("현재 발행된 쿠폰이 없습니다.");
+			System.out.println();
+		} else if(set.size() !=0) {
+		System.out.println(message(room.language, "0055"));
+		Iterator<String> iterator = set.iterator();
+		while(iterator.hasNext()){
+			String element = iterator.next();
+			System.out.println("\t" + element);
+		}
+		
+		System.out.println();
+		}
+	}
+
+	public String creatCouponNum() { // 쿠폰 추가
+
+		// Scanner scan = new Scanner(System.in);
+
+		// System.out.println("발행할 쿠폰의 개수를 입력하세요");
+		// int couponNum = scan.nextInt(); // 쿠폰 개수만큼 for문 돌릴 거다
+
+		// System.out.println("발행할 쿠폰의 할인율을 입력하세요 (두 자리 수로 입력하세요 / 예: 07, 15)");
+		// int discountRate = scan.nextInt(); //쿠폰 맨 뒷자리 두 개는 할인율(두 자리 수)이 된다.
+
+		int[] codeDigit = { 1, 2, 3, 4, 4, 6, 7, 8, 9, 0 };
+
+		Random rdn = new Random();
+
+		StringBuilder sb = new StringBuilder();
+
+		for (int j = 0; j <= 6; j++) {
+
+			int tmp = codeDigit[rdn.nextInt(codeDigit.length)];
+			sb.append(tmp);
+		}
+		return sb.toString() + String.valueOf(this.discountRate);
 	}
 	public void addCoupon() {
 		//쿠폰 추가
-		System.out.println("Add coupon...");
+		Scanner scan = new Scanner(System.in);
+		//Set<String> set = new HashSet<>();
+		System.out.println("발행할 쿠폰의 개수를 입력하세요");
+		int couponNum = scan.nextInt(); // 쿠폰 개수만큼 for문 돌릴 거다
+		System.out.println("발행할 쿠폰의 할인율을 입력하세요 (두 자리 수로 입력하세요 / 예: 07, 15)");
+		 discountRate = scan.nextInt();
+		 int size = set.size();
+		 
+		while(set.size()<couponNum) {
+			set.add(creatCouponNum());
+		}	
+		
+		
+		Iterator<String> iterator = set.iterator();
+		while(iterator.hasNext()){
+			String element = iterator.next();
+			System.out.println("\t" + element);
+		}		
+		System.out.println("쿠폰이 발행되었습니다");
 	}
 	public void delCoupon() {
 		//쿠폰 삭제
@@ -224,10 +342,13 @@ public class AdminSystem extends ReturnMessage implements ActionInterface{
 	public void selectAccount() {
 		//회원 전부 조회
 		for(Object value : userMap.values()) {
-			
 			System.out.print(value);
 			user = (AccountData) value;
-			System.out.println("   경고" + user.getCnt());
+			String bannnn="";
+			if(user.getStatus()==0) {
+				bannnn =  "정지상태";
+			}
+			System.out.println("  경고" + user.getCnt() + " " + bannnn);
 		}
 	}
 	

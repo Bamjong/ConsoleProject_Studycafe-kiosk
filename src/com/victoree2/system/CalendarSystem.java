@@ -22,21 +22,40 @@ public class CalendarSystem  extends ReturnMessage {
 	
 	//다른곳에서 사용시 
 //	
-	CalendarSystem cal = new CalendarSystem();
+//	CalendarSystem cal = new CalendarSystem();
 	
 //	void datatata() {
 //		cal.get()
 //	}
 //	cal.DateStirngYear(Calendar.getInstance());
 //  	
-	private static String time;
+	private String time;
+
+	private Calendar now = Calendar.getInstance();
+	private Calendar after = Calendar.getInstance();
+	private String Month;
 	public String DateStirngYear(Calendar date) {
 		return date.get(Calendar.YEAR)+"년";
-		}
+	}
+	public String NowTime() { //현재시간 출력
+		return DateString(now);
+	}
+	public String NowDate() {
+		return DateFormat(now);
+	}
+	public String AfterTime(int aftertime) {
+		after.add(Calendar.HOUR, aftertime);
+		return DateFormat(after);
+	}
+	public String AfterDate() {
+		return DateFormat(now);
+	}
 	public String DateStirngMonth(Calendar date) {
+
 		return date.get(Calendar.MONTH)+"월";		
 	}
 	public String DateStirngDate(Calendar date) {
+		
 		return date.get(Calendar.DATE)+"일";		
 	}
 	public String DateStirngHour(Calendar date) {
@@ -46,7 +65,7 @@ public class CalendarSystem  extends ReturnMessage {
 		return date.get(Calendar.MINUTE)+"분";		
 	}
 
-	public static String DateString(Calendar date) {
+	public String DateString(Calendar date) {
 		return date.get(Calendar.YEAR)+"년"+
 					(date.get(Calendar.MONTH)+1)+"월"+
 							date.get(Calendar.DATE)+"일"+
@@ -55,6 +74,38 @@ public class CalendarSystem  extends ReturnMessage {
 	
 	}
 
+	public String DateFormat(Calendar date) {
+		if((date.get(Calendar.MONTH)+1<10))
+		{
+			Month = "0"+(date.get(Calendar.MONTH)+1);
+		}
+		else
+		{
+			Month = ""+(date.get(Calendar.MONTH)+1);
+		}
+		return date.get(Calendar.YEAR)+""+
+				(Month)+""+
+						date.get(Calendar.DATE)+""+
+				date.get(Calendar.HOUR)+""+
+						date.get(Calendar.MINUTE)+"";
+	}
+	public Long RemainderPeriod(String date1, String date2) {
+		String refundTime="";
+		DateFormat format = new SimpleDateFormat("yyyyMMddHH");
+		Date d1 = null;
+		Date d2 = null;
+		try {
+			d1 = format.parse(date1);
+			 d2 = format.parse(date2);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 long Hour = (d1.getTime() - d2.getTime()); // 시간 *시간 기준 환불 금액 500원
+//		 System.out.println(Hour);
+		 return Hour;
+	}
+	
 	public Long refundMoneyTime(String date1, String date2){
 		String refundTime="";
 		DateFormat format = new SimpleDateFormat("yyyyMMddHH");

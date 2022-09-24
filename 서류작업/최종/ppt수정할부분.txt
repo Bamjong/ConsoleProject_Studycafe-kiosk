@@ -1,0 +1,12 @@
+--ppt31페이지--
+
+com.victoree2.sys
+ReservationSystem.java
+83라인~103라인
+
+
+--ppt36페이지--
+solved 부분
+자리를 구매한 사람, 환불한 사람도 로그인이 가능하게
+status 값이 2,3 인 계정이 로그인 접속시 가능하게 조건 추가.
+
