@@ -13,3 +13,6 @@
 
 ## 체크리스트
 ![이미지](https://user-images.githubusercontent.com/92353613/192261132-32ad4694-9b69-49f2-9b1c-030a5b12be7f.png)
+
+## PPT
+![image](https://user-images.githubusercontent.com/92353613/192261897-3e8bf870-7620-4c2c-ad87-3fba8c0705a2.png)
