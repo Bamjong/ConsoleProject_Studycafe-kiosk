@@ -40,6 +40,10 @@ public class CalendarSystem  extends ReturnMessage {
 	public String NowTime() { //현재시간 출력
 		return DateString(now);
 	}
+	public String EndDay(Calendar date)
+	{
+		return DateString(date);
+	}
 	public String NowDate() {
 		return DateFormat(now);
 	}
