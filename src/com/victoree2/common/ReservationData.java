@@ -133,6 +133,14 @@ public class ReservationData implements Serializable{//입실퇴실, 남은시�
 //				+ ", outdate=" + outdate + ", endDay=" + endDay + ", remainderPeriod=" + remainderPeriod
 //				+ ", payStatus=" + payStatus + ", roomarr=" + roomarr + ", seat=" + seat + ", price=" + price + "]";
 	}
+	
+	public String entoString() {
+		return "[ID:" + id + " name:" + name + " Payment date:" + startDay + " End date:" + endDay + " Payment amount:" + price + "]"; 
+//		return "ReservationData [id=" + id + ", name=" + name + ", startDay=" + startDay + ", indate=" + indate
+//				+ ", outdate=" + outdate + ", endDay=" + endDay + ", remainderPeriod=" + remainderPeriod
+//				+ ", payStatus=" + payStatus + ", roomarr=" + roomarr + ", seat=" + seat + ", price=" + price + "]";
+	}
+
 	public boolean isPayStatus() {
 		return payStatus;
 	}
